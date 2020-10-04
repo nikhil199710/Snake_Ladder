@@ -71,5 +71,4 @@ namespace SnakeAndLadder
             }
 
         }
-    } //while (currentPosition[0] < winningPosition && currentPosition[1]< winningPosition);
-}
+    } 
