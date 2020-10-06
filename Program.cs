@@ -1,74 +1,64 @@
-﻿using System;
+using System;
 
-namespace SnakeAndLadder
+namespace SnakeAndLadderProblem
 {
     class Program
     {
         static void Main(string[] args)
         {
-            const int NO_PLAY = 1;
-            const int LADDER = 2;
-            const int SNAKE = 3;
-            const int winningPosition = 100;
-            int checkingThePosition = 0;
-            Console.WriteLine("Welcome to snake and Ladder Game");
-            //int currentPosition = 0;
-            int iterationNo = 1;
-            int noOfPlayers = 2;
-            int[] currentPosition = new int[noOfPlayers];
-            for (int item = 0; item < currentPosition.Length; item++)
-            {
-                currentPosition[item] = 0;
-            }
-            int playersCount = 0;
-            Random random = new Random();
-            //do
-            //{
-            //for (int playersCount = 0; playersCount < noOfPlayers; playersCount++)
-            while (currentPosition[playersCount] < winningPosition)
-            {
-                do
-                {
-                    int RollingDieNumber = random.Next(1, 7);
-                    checkingThePosition = random.Next(1, 4);
-                    switch (checkingThePosition)
-                    {
-                        case LADDER:
-                            if (currentPosition[playersCount] + RollingDieNumber > winningPosition)
-                            {
-                                Console.WriteLine($"no is getting greater than 100 for player {playersCount + 1}");
-                                continue;
-                            }
-                            else
-                                currentPosition[playersCount] = currentPosition[playersCount] + RollingDieNumber;
-                            break;
-                        case SNAKE:
-                            if (currentPosition[playersCount] >= RollingDieNumber)
-                            {
-                                currentPosition[playersCount] = currentPosition[playersCount] - RollingDieNumber;
-                                break;
-                            }
-                            else
-                            {
-                                currentPosition[playersCount] = 0;
-                                break;
-                            }
-                        case NO_PLAY:
-                            break;
-                    }
-                    Console.WriteLine($"Current Position of {playersCount + 1} Player:{currentPosition[playersCount]},iteration no. {iterationNo}");
-                    iterationNo++;
-                    if (currentPosition[playersCount] == winningPosition)
-                    {
-                        Console.WriteLine($"{playersCount + 1} is winner of the game.");
-                        break;
-                    }
-                } while (checkingThePosition == LADDER);
-                if (playersCount < noOfPlayers - 1)
-                    playersCount += 1;
-                else
-                    playersCount = 0;
-            }
+            const int Start_Position = 0;
+            const int NO_Play = 1;
+            const int Ladder = 2;
+            const int Snake = 3;
+            const int No_Of_Players = 2;
+            int winningPosition = 100;
+            int[] PlayersCurrentPositions = new int[No_Of_Players];
+            int noOfTurns = 0;
+            for (int i = 0; i < No_Of_Players; i++)
+                PlayersCurrentPositions[i] = Start_Position;  
+            int currentIndex = 0;
 
+            while (PlayersCurrentPositions[currentIndex] < winningPosition)
+            {
+                Random randObj = new Random();
+                bool flag = true;
+                while (flag)
+                {
+                    int dieNumber = randObj.Next(1, 7);
+                    int option = randObj.Next(1, 4);
+                    switch (option)
+                    {
+                        case NO_Play:
+                            flag = false;
+                            break;
+                        case Ladder:
+                            if (PlayersCurrentPositions[currentIndex] + dieNumber <= winningPosition)
+                                PlayersCurrentPositions[currentIndex] += dieNumber;
+                            if (PlayersCurrentPositions[currentIndex] == winningPosition)
+                                flag = false;
+                            break;
+                        case Snake:
+                            flag = false;
+                            PlayersCurrentPositions[currentIndex] -= dieNumber;
+                            if (PlayersCurrentPositions[currentIndex] < Start_Position)
+                                PlayersCurrentPositions[currentIndex] = Start_Position;
+                            break;
+                        default:
+                            break;
+                    }
+                    Console.WriteLine("Current Player is "+(currentIndex+1)+" Current Position is: "+PlayersCurrentPositions[currentIndex]);
+                }
+                noOfTurns++;
+                if (currentIndex < No_Of_Players - 1)
+                    currentIndex += 1;
+                else currentIndex = 0;
+            }
+            for(int i = 0; i < No_Of_Players; i++)
+            {
+                Console.WriteLine("Player "+(i+1)+ ", Current Position "+ PlayersCurrentPositions[i]);
+            }
+            Console.WriteLine("Total Turns used {0}", noOfTurns);
+            Console.WriteLine("Winner is Player {0}", currentIndex+1);
         }
-    } 
+    }
+}
